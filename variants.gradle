@@ -1,0 +1,11 @@
+ext {
+	deb = [
+		url : "debUrl",
+		flag: true
+	]
+
+	nap = [
+		url : "napUrl",
+		flag: false
+	]
+}

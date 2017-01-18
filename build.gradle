@@ -1,0 +1,33 @@
+task fuckYou (dependsOn: 'hell') {
+	doLast {
+		println "Why last?"
+	}
+}
+
+task hell {
+	doLast {
+		println 'hell!!'
+	}
+}
+
+task copyTask (type: Copy) {
+  from '../dump'
+  into './'
+  rename { String filename ->
+    filename.replace('p','p.txt')
+  }
+  doLast {
+  	println 'Copied'
+  }
+}
+/*
+gradle.taskGraph.whenReady {taskGraph ->
+  if (taskGraph.hasTask(hell)) {
+      //tasks.getByName("hell").dependsOn copyTask             //does not work
+      //tasks.hell.dependsOn copyTask                          //does not work
+  }
+}
+*/
+afterEvaluate { project ->
+ 	project.tasks.hell.dependsOn copyTask
+}

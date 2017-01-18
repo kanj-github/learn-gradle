@@ -1,0 +1,40 @@
+apply from: "variants.gradle"
+
+rootProject.ext.properties.each { k, v ->
+	if (["deb", "nap"].contains(k)) {
+		task "taskFor_$k" (type: Copy) {
+			def groovySucks = rootProject.ext.properties[k]
+			println groovySucks.url
+
+			from '../dump'
+  			into './'
+  			rename { String filename ->
+    			filename.replace('p','p.txt')
+  			}
+  			doLast {
+  				println 'Copied for ' + groovySucks.url
+  			}
+		}
+	}
+}
+
+task napProcess {
+	doLast {
+		println "napProcess work"
+	}
+}
+
+task debProcess {
+	doLast {
+		println "debProcess work"
+	}
+}
+
+afterEvaluate { project ->
+	if (project.tasks.contains(napProcess)) {
+		project.tasks.napProcess.dependsOn taskFor_nap
+	}
+ 	if (project.tasks.contains(debProcess)) {
+		project.tasks.debProcess.dependsOn taskFor_deb
+	}
+}
